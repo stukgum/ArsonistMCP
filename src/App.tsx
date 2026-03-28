@@ -1,7 +1,8 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppLayout from '@/components/layout/AppLayout';
 import LoadingScreen from '@/components/features/LoadingScreen';
+import { useAppStore } from '@/stores/appStore';
 
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Agents = lazy(() => import('@/pages/Agents'));
@@ -21,6 +22,13 @@ function NotFound() {
 }
 
 export default function App() {
+  const initialize = useAppStore((state) => state.initialize);
+
+  useEffect(() => {
+    // Initialize the app on startup
+    initialize();
+  }, [initialize]);
+
   return (
     <Routes>
       <Route element={<AppLayout />}>
