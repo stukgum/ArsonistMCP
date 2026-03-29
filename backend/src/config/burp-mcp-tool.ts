@@ -3,6 +3,10 @@ import { logger } from '../utils/logger.js';
 
 /**
  * Burp Suite MCP Tool - Integrates with Burp Suite via its Rest API
+ * 
+ * SIMULATION MODE DISABLED: This tool now uses real Burp Suite API calls.
+ * If Burp Suite is not running or API calls fail, errors will be thrown
+ * instead of falling back to simulated data.
  */
 
 export interface BurpProxyHistory {
@@ -93,9 +97,8 @@ export class BurpMCPTool {
       return true;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Burp Suite connection failed (simulated mode)', { error: errorMsg });
-      // In demo mode, return true to simulate connection
-      return true;
+      logger.error('Burp Suite connection failed - not using simulation mode', { error: errorMsg });
+      throw new Error(`Burp Suite connection failed: ${errorMsg}`);
     }
   }
 
@@ -116,10 +119,8 @@ export class BurpMCPTool {
       return response.data || [];
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to get Burp proxy history (using simulated data)', { error: errorMsg });
-      
-      // Return simulated data for demo
-      return this.getSimulatedProxyHistory();
+      logger.error('Failed to get Burp proxy history - not using simulation mode', { error: errorMsg });
+      throw new Error(`Failed to retrieve Burp proxy history: ${errorMsg}`);
     }
   }
 
@@ -140,10 +141,8 @@ export class BurpMCPTool {
       return response.data || [];
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to get Burp scan issues (using simulated data)', { error: errorMsg });
-      
-      // Return simulated data for demo
-      return this.getSimulatedScanIssues();
+      logger.error('Failed to get Burp scan issues - not using simulation mode', { error: errorMsg });
+      throw new Error(`Failed to retrieve Burp scan issues: ${errorMsg}`);
     }
   }
 
@@ -168,10 +167,8 @@ export class BurpMCPTool {
       return id;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to send request to Burp Intruder (simulated)', { error: errorMsg, url });
-      
-      // Return simulated ID for demo
-      return `intruder-${Date.now()}`;
+      logger.error('Failed to send request to Burp Intruder - not using simulation mode', { error: errorMsg, url });
+      throw new Error(`Failed to send request to Burp Intruder: ${errorMsg}`);
     }
   }
 
@@ -196,10 +193,8 @@ export class BurpMCPTool {
       return id;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to send request to Burp Repeater (simulated)', { error: errorMsg, url });
-      
-      // Return simulated ID for demo
-      return `repeater-${Date.now()}`;
+      logger.error('Failed to send request to Burp Repeater - not using simulation mode', { error: errorMsg, url });
+      throw new Error(`Failed to send request to Burp Repeater: ${errorMsg}`);
     }
   }
 
@@ -222,10 +217,8 @@ export class BurpMCPTool {
       return scanId;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to start Burp active scan (simulated)', { error: errorMsg, baseUrl });
-      
-      // Return simulated ID for demo
-      return `scan-${Date.now()}`;
+      logger.error('Failed to start Burp active scan - not using simulation mode', { error: errorMsg, baseUrl });
+      throw new Error(`Failed to start Burp active scan: ${errorMsg}`);
     }
   }
 
@@ -244,10 +237,8 @@ export class BurpMCPTool {
       return response.data || { status: 'completed', progress: 100, issuesFound: 0 };
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to get Burp scan status (using simulated data)', { error: errorMsg, scanId });
-      
-      // Return simulated status for demo
-      return { status: 'completed', progress: 100, issuesFound: 3 };
+      logger.error('Failed to get Burp scan status - not using simulation mode', { error: errorMsg, scanId });
+      throw new Error(`Failed to get Burp scan status: ${errorMsg}`);
     }
   }
 
@@ -265,81 +256,12 @@ export class BurpMCPTool {
       return response.data;
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-      logger.warn('Failed to get Burp status (using simulated data)', { error: errorMsg });
-      
-      // Return simulated status for demo
-      return {
-        suiteVersion: '2024.1',
-        juceVersion: '2024.1',
-        portscannerVersion: '2024.1',
-        requirementsVersion: '2024.1',
-      };
+      logger.error('Failed to get Burp status - not using simulation mode', { error: errorMsg });
+      throw new Error(`Failed to get Burp status: ${errorMsg}`);
     }
   }
 
-  // Simulated data methods for demo mode
-  private getSimulatedProxyHistory(): BurpProxyHistory[] {
-    return [
-      {
-        id: '1',
-        messageId: 1,
-        time: Date.now(),
-        method: 'GET',
-        url: 'https://example.com/api/users',
-        statusCode: 200,
-        statusMessage: 'OK',
-        requestLength: 512,
-        responseLength: 2048,
-        notes: 'Normal request',
-        hasRequest: true,
-        hasResponse: true,
-      },
-      {
-        id: '2',
-        messageId: 2,
-        time: Date.now() - 1000,
-        method: 'POST',
-        url: 'https://example.com/api/login',
-        statusCode: 401,
-        statusMessage: 'Unauthorized',
-        requestLength: 256,
-        responseLength: 512,
-        hasRequest: true,
-        hasResponse: true,
-      },
-    ];
-  }
 
-  private getSimulatedScanIssues(): BurpScanIssue[] {
-    return [
-      {
-        id: '1',
-        serialNumber: 1,
-        name: 'SQL Injection',
-        issueBackground: 'SQL injection is a critical vulnerability',
-        severity: 'critical',
-        confidence: 'certain',
-        type: 1,
-        host: 'example.com',
-        port: 443,
-        protocol: 'https',
-        url: 'https://example.com/api/users',
-      },
-      {
-        id: '2',
-        serialNumber: 2,
-        name: 'Cross-site scripting (stored)',
-        issueBackground: 'Stored XSS allows attackers to inject malicious code',
-        severity: 'high',
-        confidence: 'certain',
-        type: 2,
-        host: 'example.com',
-        port: 443,
-        protocol: 'https',
-        url: 'https://example.com/comments',
-      },
-    ];
-  }
 }
 
 // Export singleton instance

@@ -1,7 +1,11 @@
 import axios from 'axios';
 import { logger } from '../utils/logger.js';
+import { getBurpMCPTool } from './burp-mcp-tool.js';
 
 // Security Tool Configurations
+// SIMULATION MODE DISABLED: All security tools now use real integrations.
+// ZAP and Nmap integrations are not implemented and will throw errors.
+// Only Burp Suite integration is available in production mode.
 export interface BurpSuiteConfig {
   url: string;
   apiKey?: string;
@@ -67,68 +71,67 @@ export interface ScanResults {
 // Initialize security tools
 export async function initializeSecurityTools(): Promise<void> {
   try {
-    // For now, we'll simulate tool availability
-    // In a real implementation, you would check actual tool connections
-    logger.info('Security tools initialization skipped - using simulation mode');
-
+    // Test real Burp Suite connection instead of simulation
+    const burpTool = getBurpMCPTool();
+    const connected = await burpTool.testConnection();
+    if (connected) {
+      logger.info('Burp Suite connection verified - production mode enabled');
+    }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    logger.warn('Some security tools not available', { error: errorMessage });
+    logger.error('Burp Suite connection failed - not using simulation mode', { error: errorMessage });
+    throw error;
   }
 }
 
-// Burp Suite Integration (simulated)
+// Burp Suite Integration (production mode)
 export async function testBurpConnection(): Promise<boolean> {
-  // Simulate Burp Suite connection
-  logger.info('Testing Burp Suite connection (simulated)');
-  return true; // Always return true for demo
+  const burpTool = getBurpMCPTool();
+  return await burpTool.testConnection();
 }
 
 export async function getBurpProxyHistory(): Promise<ProxyHistoryItem[]> {
-  // Simulate proxy history
-  logger.info('Getting Burp proxy history (simulated)');
-  return [
-    {
-      id: 'req-1',
-      method: 'GET',
-      url: 'https://example.com/api/users',
-      statusCode: 200,
-      responseTime: 150,
-      size: 2048,
-      timestamp: new Date().toISOString()
-    }
-  ];
+  const burpTool = getBurpMCPTool();
+  const history = await burpTool.getProxyHistory();
+  return history.map(item => ({
+    id: item.id,
+    method: item.method,
+    url: item.url,
+    statusCode: item.statusCode,
+    responseTime: 0, // Not available in Burp API
+    size: item.responseLength,
+    timestamp: new Date(item.time).toISOString()
+  }));
 }
 
 export async function sendToBurpIntruder(url: string, method: string, headers: any, body?: string): Promise<void> {
-  logger.info('Sending request to Burp Intruder (simulated)', { url, method });
-  // Simulate sending to Burp
+  const burpTool = getBurpMCPTool();
+  await burpTool.sendToIntruder(url, method, headers, body);
 }
 
-// OWASP ZAP Integration (simulated)
+// OWASP ZAP Integration (production mode - not implemented)
 export async function testZapConnection(): Promise<boolean> {
-  logger.info('Testing OWASP ZAP connection (simulated)');
-  return true;
+  throw new Error('OWASP ZAP integration not implemented - not using simulation mode');
 }
 
 export async function startZapScan(url: string): Promise<string> {
-  logger.info('Starting ZAP scan (simulated)', { url });
-  return `scan-${Date.now()}`;
+  throw new Error('OWASP ZAP integration not implemented - not using simulation mode');
 }
 
 export async function getZapScanStatus(scanId: string): Promise<any> {
-  logger.info('Getting ZAP scan status (simulated)', { scanId });
+  throw new Error('OWASP ZAP integration not implemented - not using simulation mode');
+}
   return { status: 'completed', progress: 100 };
 }
 
-// Nmap Integration (simulated)
+// Nmap Integration (production mode - not implemented)
 export async function testNmapAvailability(): Promise<boolean> {
-  logger.info('Testing Nmap availability (simulated)');
-  return true;
+  throw new Error('Nmap integration not implemented - not using simulation mode');
 }
 
 export async function runNmapScan(target: string, options: Partial<NmapConfig> = {}): Promise<ScanResult> {
-  logger.info('Running Nmap scan (simulated)', { target, options });
+  throw new Error('Nmap integration not implemented - not using simulation mode');
+}
 
   // Simulate nmap results
   return {
