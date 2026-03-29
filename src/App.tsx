@@ -25,6 +25,9 @@ export default function App() {
   const initialize = useAppStore((state) => state.initialize);
 
   useEffect(() => {
+    // Ensure a fresh dashboard + app state on every hard page load
+    localStorage.removeItem('arsonist-mcp-store');
+
     // Initialize the app on startup
     initialize();
   }, [initialize]);

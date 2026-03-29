@@ -273,6 +273,10 @@ export default function InteractiveTerminal({ expanded: initialExpanded = false 
     [input, terminal, executeCommand]
   );
 
+  useEffect(() => {
+    terminal.resetTerminal();
+  }, [terminal]);
+
   const handleTerminalClick = useCallback(() => {
     inputRef.current?.focus();
   }, []);

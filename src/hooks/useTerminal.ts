@@ -32,13 +32,17 @@ function uid(): string {
   return `tl-${Date.now()}-${lineCounter}`;
 }
 
-export function useTerminal() {
-  const [lines, setLines] = useState<TerminalLine[]>([
+function getInitialLines(): TerminalLine[] {
+  return [
     { id: uid(), type: 'system', content: 'Arsonist-MCP AI v1.0.0 — Autonomous Cybersecurity Command Center', timestamp: now() },
     { id: uid(), type: 'system', content: 'MCP Server connected. Burp Suite Professional active on 127.0.0.1:8080.', timestamp: now() },
     { id: uid(), type: 'info', content: 'Model: Llama 3.1 70B (Ollama) | Safety: Cautious | Scope: *.target.com', timestamp: now() },
     { id: uid(), type: 'system', content: 'Type a command or describe an objective in natural language. Use /help for available commands.', timestamp: now() },
-  ]);
+  ];
+}
+
+export function useTerminal() {
+  const [lines, setLines] = useState<TerminalLine[]>(getInitialLines());
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -63,9 +67,19 @@ export function useTerminal() {
   }, []);
 
   const clearTerminal = useCallback(() => {
-    setLines([
-      { id: uid(), type: 'system', content: 'Terminal cleared.', timestamp: now() },
-    ]);
+    setLines(getInitialLines());
+    setCommandHistory([]);
+    setHistoryIndex(-1);
+    setIsProcessing(false);
+    abortRef.current = false;
+  }, []);
+
+  const resetTerminal = useCallback(() => {
+    setLines(getInitialLines());
+    setCommandHistory([]);
+    setHistoryIndex(-1);
+    setIsProcessing(false);
+    abortRef.current = false;
   }, []);
 
   const pushHistory = useCallback((cmd: string) => {
@@ -110,6 +124,7 @@ export function useTerminal() {
     addTypingLine,
     markTypingComplete,
     clearTerminal,
+    resetTerminal,
     pushHistory,
     navigateHistory,
     abort,
