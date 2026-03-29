@@ -60,20 +60,18 @@ cd ..
 
 ### 3. Configure Environment
 
-The app works in two modes:
+**SIMULATION MODE DISABLED**: The application now only works in production mode with real integrations.
 
-**Mode A: Demo Mode (No Burp Suite Required)**
-```bash
-# backend/.env - Uses simulated data
-BURP_API_KEY=demo-burp-key  # or leave unset
-```
-
-**Mode B: Production Mode (With Burp Suite)**
+**Production Mode (Burp Suite Required)**
 ```bash
 # backend/.env
 BURP_API_URL=http://localhost:8080
 BURP_API_KEY=your_real_burp_api_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
+
+**Note**: Demo/simulation mode has been removed. Real Burp Suite and Supabase connections are required.
 
 ### 4. Start Backend
 

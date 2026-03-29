@@ -257,11 +257,12 @@ Get overall MCP server status and session information.
 
 ## Error Handling
 
-The application includes graceful fallback to simulated data when Burp Suite is not available. This allows you to test the MCP tools without a running Burp Suite instance. In production:
+**SIMULATION MODE DISABLED**: The application no longer falls back to simulated data. All Burp Suite operations require a live connection. In production:
 
 - Ensure Burp Suite is running and the REST API is enabled
 - Configure proper `BURP_API_URL` and `BURP_API_KEY`
 - Monitor logs for connection errors: `./logs/server.log`
+- The server will start but Burp features will be unavailable if connection fails
 
 ## Testing
 
@@ -315,8 +316,8 @@ The frontend dashboard includes:
 │           │                        │     │
 │           ↓                        ↓     │
 │  ┌────────────────┐     ┌──────────────┐
-│  │ BurpMCPTool    │     │ In-Memory DB │
-│  │ (HTTP Client)  │     │ (Mock Data)  │
+│  │ BurpMCPTool    │     │ Supabase DB  │
+│  │ (HTTP Client)  │     │ (Production) │
 │  └────────┬───────┘     └──────────────┘
 │           │
 └───────────┼───────────────────────────────┘
@@ -337,7 +338,7 @@ The frontend dashboard includes:
 1. Verify Burp Suite is running on the configured port
 2. Check REST API is enabled in Burp settings
 3. Review logs: `backend/logs/server.log`
-4. Try the simulated mode by not setting `BURP_API_KEY`
+4. **Note**: Simulation mode has been disabled - real Burp Suite connection is required
 
 ### Plugin Issues
 1. Ensure Burp Suite Professional or Community edition is installed
