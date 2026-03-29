@@ -26,7 +26,7 @@ const SIMULATED_RESPONSES: Record<string, Array<{ type: string; content: string;
   status: [
     { type: 'info', content: 'Checking subsystem status...', delay: 300 },
     { type: 'success', content: 'MCP Server:   CONNECTED (stdio transport)', delay: 200 },
-    { type: 'success', content: 'Burp Suite:   ACTIVE on 127.0.0.1:8080 (Professional v2024.1)', delay: 150 },
+    { type: 'success', content: 'Burp Suite:   ACTIVE on 127.0.0.1:8080 (Community v2024.1)', delay: 150 },
     { type: 'success', content: 'Caddy Proxy:  RUNNING (reverse proxy on :8443)', delay: 150 },
     { type: 'success', content: 'AI Backend:   Ollama — Llama 3.1 70B (quantized, 42GB VRAM)', delay: 150 },
     { type: 'info', content: 'All systems operational. Uptime: 4h 23m.', delay: 200 },

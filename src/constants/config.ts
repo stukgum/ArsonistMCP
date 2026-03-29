@@ -38,7 +38,7 @@ export const DEFAULT_MODELS: ModelConfig[] = [
 ];
 
 export const DEFAULT_CONFIG: AppConfig = {
-  burpPath: '/Applications/Burp Suite Professional.app',
+  burpPath: '/Applications/Burp Suite Community Edition.app',
   burpHost: '127.0.0.1',
   burpPort: 8080,
   mcpServerStatus: 'connected',

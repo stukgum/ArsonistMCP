@@ -35,7 +35,7 @@ function uid(): string {
 function getInitialLines(): TerminalLine[] {
   return [
     { id: uid(), type: 'system', content: 'Arsonist-MCP AI v1.0.0 — Autonomous Cybersecurity Command Center', timestamp: now() },
-    { id: uid(), type: 'system', content: 'MCP Server connected. Burp Suite Professional active on 127.0.0.1:8080.', timestamp: now() },
+    { id: uid(), type: 'system', content: 'MCP Server connected. Burp Suite Community active on 127.0.0.1:8080.', timestamp: now() },
     { id: uid(), type: 'info', content: 'Model: Llama 3.1 70B (Ollama) | Safety: Cautious | Scope: *.target.com', timestamp: now() },
     { id: uid(), type: 'system', content: 'Type a command or describe an objective in natural language. Use /help for available commands.', timestamp: now() },
   ];
