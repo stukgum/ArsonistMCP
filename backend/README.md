@@ -8,7 +8,7 @@ A comprehensive backend service that powers the Arsonist-MCP AI platform with re
 
 - **RESTful API**: Complete REST API for agents, vulnerabilities, and MCP communication
 - **Real AI Integration**: Google AI, OpenAI, HuggingFace, and Ollama support
-- **Security Tools**: Burp Suite, OWASP ZAP, and Nmap integration
+- **Burp Suite Integration**: Full integration with Burp Suite REST API (no simulation mode)
 - **Database**: Supabase PostgreSQL database with real-time capabilities
 - **WebSocket**: Real-time agent logs and status updates
 - **MCP Server**: Full Model Context Protocol implementation
@@ -271,20 +271,19 @@ const response = await generateText('Local AI analysis', 'ollama', { model: 'lla
 
 ## 🔒 Security Tools Integration
 
-### Burp Suite
+### Burp Suite (Fully Implemented)
 - Proxy history retrieval
 - Active scanning
 - Intruder automation
+- Real-time integration with Burp Suite REST API
 
-### OWASP ZAP
-- Automated scanning
-- API testing
-- Report generation
+### OWASP ZAP (Not Implemented)
+- Placeholder for future ZAP integration
+- Currently throws "not implemented" errors
 
-### Nmap
-- Network discovery
-- Service enumeration
-- Vulnerability detection
+### Nmap (Not Implemented)
+- Placeholder for future Nmap integration
+- Currently throws "not implemented" errors
 
 ## 🧪 Testing
 
