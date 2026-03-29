@@ -21,7 +21,7 @@
 - Updated MCP capabilities with Burp tools
 - All tool handlers implemented
 - Resources endpoint working
-- Graceful fallback to simulated data when Burp unavailable
+- **Simulation mode disabled** - Real Burp Suite connection required
 
 ### 4. **Documentation Created** ✓
 - `BURP_MCP_INTEGRATION.md` - Complete integration guide
@@ -225,7 +225,7 @@ curl -X POST http://localhost:3001/api/mcp/tools/call \
 - [ ] Frontend loads at http://localhost:8080
 - [ ] Can call `/api/mcp/initialize` successfully
 - [ ] Can call `/api/mcp/tools/call` with burp-status
-- [ ] Simulated data works even without Burp Suite
+- [ ] **Real Burp Suite connection required** (simulation mode disabled)
 - [ ] Test script executes without errors
 - [ ] Frontend TBD Vulnerability Scanner works
 
@@ -251,8 +251,8 @@ kill -9 <PID>  # Kill it
 → Solution: 
 1. Verify Burp is running on localhost:8080
 2. Check CORS settings
-3. App will use simulated data instead
-4. No failure - it just works differently!
+3. **Simulation mode disabled** - real Burp connection required
+4. Check backend logs for connection errors
 ```
 
 ### Frontend Can't Connect to Backend
