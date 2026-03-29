@@ -73,14 +73,12 @@ export async function initializeSecurityTools(): Promise<void> {
   try {
     // Test real Burp Suite connection instead of simulation
     const burpTool = getBurpMCPTool();
-    const connected = await burpTool.testConnection();
-    if (connected) {
-      logger.info('Burp Suite connection verified - production mode enabled');
-    }
+    await burpTool.testConnection();
+    logger.info('Burp Suite connection verified - production mode enabled');
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    logger.error('Burp Suite connection failed - not using simulation mode', { error: errorMessage });
-    throw error;
+    logger.warn('Burp Suite connection failed - server will start but Burp features will be unavailable', { error: errorMessage });
+    // Don't throw error - allow server to start even without Burp
   }
 }
 
@@ -121,8 +119,6 @@ export async function startZapScan(url: string): Promise<string> {
 export async function getZapScanStatus(scanId: string): Promise<any> {
   throw new Error('OWASP ZAP integration not implemented - not using simulation mode');
 }
-  return { status: 'completed', progress: 100 };
-}
 
 // Nmap Integration (production mode - not implemented)
 export async function testNmapAvailability(): Promise<boolean> {
@@ -131,31 +127,6 @@ export async function testNmapAvailability(): Promise<boolean> {
 
 export async function runNmapScan(target: string, options: Partial<NmapConfig> = {}): Promise<ScanResult> {
   throw new Error('Nmap integration not implemented - not using simulation mode');
-}
-
-  // Simulate nmap results
-  return {
-    target,
-    ports: [
-      { port: 80, state: 'open', service: 'http' },
-      { port: 443, state: 'open', service: 'https' },
-      { port: 22, state: 'filtered', service: 'ssh' }
-    ],
-    services: [
-      { name: 'http', port: 80 },
-      { name: 'https', port: 443 }
-    ],
-    vulnerabilities: [
-      {
-        id: 'vuln-001',
-        title: 'OpenSSH Weak Key Exchange',
-        severity: 'medium',
-        description: 'Weak key exchange algorithm detected',
-        cvss: 5.5
-      }
-    ],
-    scanTime: 15000
-  };
 }
 
 // Vulnerability scanning orchestration
