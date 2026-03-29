@@ -43,7 +43,7 @@ An AI-powered penetration testing command center featuring autonomous vulnerabil
 
 1. **Clone the repository**
    ```bash
-   git clone <YOUR_GIT_URL>
+   git clone https://github.com/stukgum/ArsonistMCP
    cd arsonist-mcp
    ```
 
